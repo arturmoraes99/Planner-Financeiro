@@ -1,0 +1,135 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  preferences UserPreference?
+  avatarUrl   String?
+
+  transactions Transaction[]
+  goals        Goal[]
+  budgets      Budget[]
+  creditCards  CreditCard[]
+
+  @@map("users")
+}
+
+model Transaction {
+  id           String   @id @default(cuid())
+  userId       String
+  type         String
+  description  String
+  amount       Float
+  category     String
+  date         String
+  invoiceMonth String?
+  source       String   @default("manual")
+  note         String?
+  cardId       String? // ← vínculo opcional com cartão
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  card CreditCard? @relation(fields: [cardId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([date])
+  @@index([invoiceMonth])
+  @@index([cardId])
+  @@map("transactions")
+}
+
+model UserPreference {
+  id                   String  @id @default(uuid())
+  userId               String  @unique
+  currency             String  @default("BRL")
+  theme                String  @default("light")
+  language             String  @default("pt-BR")
+  notificationsEnabled Boolean @default(true)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_preferences")
+}
+
+model Goal {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String
+  target    Float
+  current   Float    @default(0)
+  deadline  String?
+  icon      String   @default("🎯")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("goals")
+}
+
+model Budget {
+  id        String   @id @default(cuid())
+  userId    String
+  category  String
+  limit     Float
+  month     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, category, month])
+  @@index([userId])
+  @@map("budgets")
+}
+
+model CreditCard {
+  id         String   @id @default(cuid())
+  userId     String
+  name       String // "Nubank", "Inter Visa"
+  lastDigits String? // "1234"
+  limit      Float
+  closingDay Int // dia de fechamento (1-31)
+  dueDay     Int // dia de vencimento (1-31)
+  color      String   @default("#3b82f6")
+  icon       String   @default("💳")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+  invoices     CardInvoice[]
+
+  @@index([userId])
+  @@map("credit_cards")
+}
+
+model CardInvoice {
+  id        String    @id @default(cuid())
+  cardId    String
+  month     String // "YYYY-MM"
+  total     Float     @default(0)
+  paid      Boolean   @default(false)
+  paidAt    DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  card CreditCard @relation(fields: [cardId], references: [id], onDelete: Cascade)
+
+  @@unique([cardId, month])
+  @@index([cardId])
+  @@map("card_invoices")
+}
