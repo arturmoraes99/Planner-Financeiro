@@ -1,18 +1,18 @@
-import { Router } from 'express';
-import { SettingsController } from '../controllers/SettingsController';
-import { authMiddleware } from '../middlewares/auth.middleware';
+import { Router } from 'express'
+import { SettingsController } from '../controllers/SettingsController'
+import { authMiddleware }     from '../middlewares/auth.middleware'
 
-const router = Router();
-const settingsController = new SettingsController();
+const router = Router()
+const ctrl   = new SettingsController()
 
-router.use(authMiddleware);
+router.use(authMiddleware)
 
-router.get('/profile', settingsController.getProfile);
-router.put('/profile', settingsController.updateProfile);
-router.put('/password', settingsController.changePassword);
-router.get('/preferences', settingsController.getPreferences);
-router.put('/preferences', settingsController.updatePreferences);
-router.delete('/account', settingsController.deleteAccount);
-router.get('/export', settingsController.exportData);
+router.get('/profile',     (req, res) => ctrl.getProfile(req, res))
+router.put('/profile',     (req, res) => ctrl.updateProfile(req, res))
+router.put('/password',    (req, res) => ctrl.changePassword(req, res))
+router.get('/preferences', (req, res) => ctrl.getPreferences(req, res))
+router.put('/preferences', (req, res) => ctrl.updatePreferences(req, res))
+router.delete('/account',  (req, res) => ctrl.deleteAccount(req, res))
+router.get('/export',      (req, res) => ctrl.exportData(req, res))
 
-export default router;
+export default router
