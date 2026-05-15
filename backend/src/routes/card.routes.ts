@@ -1,5 +1,5 @@
-import { Router } from 'express'
-import { authMiddleware } from '../middlewares/auth.middleware'
+import { Router, Request, Response } from 'express'
+import { authMiddleware, AuthRequest } from '../middlewares/auth.middleware'
 import {
   listCards,
   createCard,
@@ -13,20 +13,23 @@ import {
 
 const router = Router()
 
-router.use(authMiddleware as any)
+router.use(authMiddleware)
+
+const auth = (handler: (req: AuthRequest, res: Response) => Promise<void>) =>
+  (req: Request, res: Response) => handler(req as AuthRequest, res)
 
 // Cartões
-router.get('/',          listCards         as any)
-router.post('/',         createCard        as any)
-router.put('/:id',       updateCard        as any)
-router.delete('/:id',    deleteCard        as any)
+router.get('/',    auth(listCards))
+router.post('/',   auth(createCard))
+router.put('/:id', auth(updateCard))
+router.delete('/:id', auth(deleteCard))
 
 // Lançamentos no cartão
-router.post('/:cardId/transactions', addCardTransaction as any)
+router.post('/:cardId/transactions', auth(addCardTransaction))
 
 // Faturas
-router.get('/:cardId/invoices',              listInvoices      as any)
-router.get('/:cardId/invoices/:month',       getInvoiceByMonth as any)
-router.patch('/:cardId/invoices/:month/pay', payInvoice        as any)
+router.get('/:cardId/invoices',              auth(listInvoices))
+router.get('/:cardId/invoices/:month',       auth(getInvoiceByMonth))
+router.patch('/:cardId/invoices/:month/pay', auth(payInvoice))
 
 export default router

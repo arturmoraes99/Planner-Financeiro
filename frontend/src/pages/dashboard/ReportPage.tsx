@@ -54,7 +54,7 @@ export function ReportPage({ month, year, showToast }: Props) {
       const el = document.createElement('div')
       el.style.cssText = 'background:#fff;color:#111;padding:32px;font-family:Segoe UI,sans-serif;width:794px'
       el.innerHTML = `
-        <h1 style="font-size:1.4rem;color:#1e3a5f;border-bottom:2px solid #1e3a5f;padding-bottom:8px;margin-bottom:16px">
+        <h1 style="font-size:1.4rem;color:#00C39A;border-bottom:2px solid #00C39A;padding-bottom:8px;margin-bottom:16px">
           💰 Planner Financeiro Pro — ${mesAno}
         </h1>
         <p style="font-size:.8rem;color:#64748b;margin-bottom:20px">
@@ -62,9 +62,9 @@ export function ReportPage({ month, year, showToast }: Props) {
         </p>
 
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;margin-bottom:24px">
-          <div style="background:#f0fdf4;border-radius:8px;padding:12px;border-left:4px solid #22c55e">
+          <div style="background:#f0fdf4;border-radius:8px;padding:12px;border-left:4px solid #00C39A">
             <div style="font-size:.7rem;color:#666;text-transform:uppercase">Receitas</div>
-            <div style="font-size:1.2rem;font-weight:800;color:#16a34a">${fmt(totR)}</div>
+            <div style="font-size:1.2rem;font-weight:800;color:#00C39A">${fmt(totR)}</div>
           </div>
           <div style="background:#fef2f2;border-radius:8px;padding:12px;border-left:4px solid #ef4444">
             <div style="font-size:.7rem;color:#666;text-transform:uppercase">Despesas</div>
@@ -72,7 +72,7 @@ export function ReportPage({ month, year, showToast }: Props) {
           </div>
           <div style="background:#eff6ff;border-radius:8px;padding:12px;border-left:4px solid #3b82f6">
             <div style="font-size:.7rem;color:#666;text-transform:uppercase">Saldo</div>
-            <div style="font-size:1.2rem;font-weight:800;color:${saldo >= 0 ? '#1d4ed8' : '#dc2626'}">${fmt(saldo)}</div>
+            <div style="font-size:1.2rem;font-weight:800;color:${saldo >= 0 ? '#00C39A' : '#dc2626'}">${fmt(saldo)}</div>
           </div>
           <div style="background:#fefce8;border-radius:8px;padding:12px;border-left:4px solid #f59e0b">
             <div style="font-size:.7rem;color:#666;text-transform:uppercase">Comprometido</div>
@@ -80,9 +80,9 @@ export function ReportPage({ month, year, showToast }: Props) {
           </div>
         </div>
 
-        <h2 style="font-size:1rem;color:#1e3a5f;margin:16px 0 8px">📥 Receitas</h2>
+        <h2 style="font-size:1rem;color:#00C39A;margin:16px 0 8px">📥 Receitas</h2>
         <table style="width:100%;border-collapse:collapse;font-size:.82rem">
-          <tr style="background:#1e3a5f;color:#fff">
+          <tr style="background:#00C39A;color:#fff">
             <th style="padding:7px 10px;text-align:left">Data</th>
             <th style="padding:7px 10px;text-align:left">Descrição</th>
             <th style="padding:7px 10px;text-align:left">Categoria</th>
@@ -91,13 +91,13 @@ export function ReportPage({ month, year, showToast }: Props) {
           ${recs.length ? tableRows(recs) : '<tr><td colspan="4" style="text-align:center;padding:8px;color:#999">Nenhuma receita</td></tr>'}
           <tr style="background:#f0fdf4">
             <td colspan="3" style="padding:7px 10px;font-weight:700">Total Receitas</td>
-            <td style="text-align:right;padding:7px 10px;font-weight:800;color:#16a34a">${fmt(totR)}</td>
+            <td style="text-align:right;padding:7px 10px;font-weight:800;color:#00C39A">${fmt(totR)}</td>
           </tr>
         </table>
 
-        <h2 style="font-size:1rem;color:#1e3a5f;margin:16px 0 8px">📤 Despesas</h2>
+        <h2 style="font-size:1rem;color:#ef4444;margin:16px 0 8px">📤 Despesas</h2>
         <table style="width:100%;border-collapse:collapse;font-size:.82rem">
-          <tr style="background:#1e3a5f;color:#fff">
+          <tr style="background:#ef4444;color:#fff">
             <th style="padding:7px 10px;text-align:left">Data</th>
             <th style="padding:7px 10px;text-align:left">Descrição</th>
             <th style="padding:7px 10px;text-align:left">Categoria</th>
@@ -110,9 +110,9 @@ export function ReportPage({ month, year, showToast }: Props) {
           </tr>
         </table>
 
-        <h2 style="font-size:1rem;color:#1e3a5f;margin:16px 0 8px">🍩 Por Categoria</h2>
+        <h2 style="font-size:1rem;color:#00C39A;margin:16px 0 8px">🍩 Por Categoria</h2>
         <table style="width:100%;border-collapse:collapse;font-size:.82rem">
-          <tr style="background:#1e3a5f;color:#fff">
+          <tr style="background:#00C39A;color:#fff">
             <th style="padding:7px 10px;text-align:left">Categoria</th>
             <th style="padding:7px 10px;text-align:right">Total</th>
             <th style="padding:7px 10px;text-align:right">%</th>
@@ -150,25 +150,31 @@ export function ReportPage({ month, year, showToast }: Props) {
   }
 
   return (
-    <Card>
-      <div className="flex items-center justify-between mb-6">
-        <CardTitle className="mb-0">
-          📄 Relatório — {MONTHS[month]} {year}
+    <Card className="bg-[#0F172A]/80 backdrop-blur-sm border border-white/5 rounded-2xl p-6">
+      <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
+        <CardTitle className="mb-0 text-[#00C39A] flex items-center gap-2">
+          <span className="text-xl">📄</span>
+          Relatório — {MONTHS[month]} {year}
         </CardTitle>
-        <Button onClick={handleExportPDF}>⬇ Exportar PDF</Button>
+        <Button 
+          onClick={handleExportPDF}
+          className="bg-gradient-to-r from-[#00C39A] to-[#00A383] hover:from-[#00D4A8] hover:to-[#00C39A] text-white font-semibold"
+        >
+          ⬇ Exportar PDF
+        </Button>
       </div>
 
       {loading ? <Spinner /> : (
         <>
           {/* Summary */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
             {[
-              { l: '📥 Receitas',     v: fmt(totR),  c: 'text-green-400' },
-              { l: '📤 Despesas',     v: fmt(totD),  c: 'text-red-400' },
-              { l: '💳 Saldo',        v: fmt(saldo), c: saldo >= 0 ? 'text-blue-400' : 'text-red-400' },
-              { l: '📊 Comprometido', v: `${totR > 0 ? (totD / totR * 100).toFixed(1) : 0}%`, c: 'text-yellow-400' },
-            ].map(({ l, v, c }) => (
-              <div key={l} className="bg-slate-900/60 rounded-xl p-4">
+              { l: '📥 Receitas',     v: fmt(totR),  c: 'text-[#00C39A]', bg: 'bg-[#00C39A]/10', border: 'border-[#00C39A]/20' },
+              { l: '📤 Despesas',     v: fmt(totD),  c: 'text-red-400', bg: 'bg-red-500/10', border: 'border-red-500/20' },
+              { l: '💳 Saldo',        v: fmt(saldo), c: saldo >= 0 ? 'text-[#00C39A]' : 'text-red-400', bg: saldo >= 0 ? 'bg-[#00C39A]/10' : 'bg-red-500/10', border: saldo >= 0 ? 'border-[#00C39A]/20' : 'border-red-500/20' },
+              { l: '📊 Comprometido', v: `${totR > 0 ? (totD / totR * 100).toFixed(1) : 0}%`, c: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/20' },
+            ].map(({ l, v, c, bg, border }) => (
+              <div key={l} className={`${bg} ${border} border rounded-xl p-4`}>
                 <div className="text-xs text-slate-400 mb-1">{l}</div>
                 <div className={`text-xl font-black ${c}`}>{v}</div>
               </div>
@@ -178,17 +184,17 @@ export function ReportPage({ month, year, showToast }: Props) {
           {/* Lists */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             {[
-              { title: '📥 Receitas', items: recs,  color: 'border-green-500', amtCls: 'text-green-400' },
-              { title: '📤 Despesas', items: desps, color: 'border-red-500',   amtCls: 'text-red-400'   },
-            ].map(({ title, items, color, amtCls }) => (
+              { title: '📥 Receitas', items: recs,  borderColor: 'border-l-[#00C39A]', amtCls: 'text-[#00C39A]' },
+              { title: '📤 Despesas', items: desps, borderColor: 'border-l-red-500',   amtCls: 'text-red-400'   },
+            ].map(({ title, items, borderColor, amtCls }) => (
               <div key={title}>
                 <p className={`font-bold text-sm mb-3 ${amtCls}`}>{title}</p>
                 {items.length === 0
                   ? <EmptyState message="Nenhum lançamento." />
                   : [...items].sort((a, b) => b.date.localeCompare(a.date)).map(t => (
-                    <div key={t.id} className={`flex justify-between items-center bg-slate-900/50 rounded-xl px-3 py-2.5 mb-2 border-l-4 ${color}`}>
+                    <div key={t.id} className={`flex justify-between items-center bg-[#0B1120] rounded-xl px-4 py-3 mb-2 border-l-4 ${borderColor} border border-white/5`}>
                       <div>
-                        <div className="text-sm font-semibold">{t.description}</div>
+                        <div className="text-sm font-semibold text-white">{t.description}</div>
                         <div className="text-xs text-slate-500">{t.category} · {fmtDate(t.date)}</div>
                       </div>
                       <span className={`font-black text-sm ${amtCls}`}>{fmt(t.amount)}</span>
@@ -201,19 +207,19 @@ export function ReportPage({ month, year, showToast }: Props) {
 
           {/* Categories */}
           <div>
-            <p className="font-bold text-sm text-blue-400 mb-3">🍩 Despesas por Categoria</p>
+            <p className="font-bold text-sm text-[#00C39A] mb-4">🍩 Despesas por Categoria</p>
             {catEntries.length === 0
               ? <EmptyState message="Sem despesas este mês." />
               : catEntries.map(([c, v]) => (
-                <div key={c} className="mb-3">
-                  <div className="flex justify-between text-xs text-slate-400 mb-1">
-                    <span>{c}</span>
-                    <span>{fmt(v)} ({totD > 0 ? (v / totD * 100).toFixed(1) : 0}%)</span>
+                <div key={c} className="mb-4">
+                  <div className="flex justify-between text-xs text-slate-400 mb-1.5">
+                    <span className="text-white font-medium">{c}</span>
+                    <span>{fmt(v)} <span className="text-slate-500">({totD > 0 ? (v / totD * 100).toFixed(1) : 0}%)</span></span>
                   </div>
-                  <div className="bg-slate-900 rounded-full h-2.5 overflow-hidden">
+                  <div className="bg-[#1E293B] rounded-full h-2.5 overflow-hidden">
                     <div
                       className="h-full rounded-full transition-all duration-500"
-                      style={{ width: `${(v / catEntries[0][1] * 100).toFixed(1)}%`, background: CATEGORY_COLORS[c] || '#64748b' }}
+                      style={{ width: `${(v / catEntries[0][1] * 100).toFixed(1)}%`, background: CATEGORY_COLORS[c] || '#00C39A' }}
                     />
                   </div>
                 </div>

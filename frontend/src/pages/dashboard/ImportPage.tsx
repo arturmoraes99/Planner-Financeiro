@@ -160,8 +160,11 @@ export function ImportPage({ month, year, showToast }: Props) {
 
   return (
     <>
-      <Card>
-        <CardTitle>📥 Importar Fatura / Extrato</CardTitle>
+      <Card className="bg-[#0F172A]/80 backdrop-blur-sm border border-white/5 rounded-2xl p-6">
+        <CardTitle className="text-[#00C39A] flex items-center gap-2 mb-5">
+          <span className="text-xl">📥</span>
+          Importar Fatura / Extrato
+        </CardTitle>
 
         {/* Supported formats info */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
@@ -169,22 +172,24 @@ export function ImportPage({ month, year, showToast }: Props) {
             {
               title: '📄 Formato OFX / QFX',
               desc: 'Exportado pelos principais bancos brasileiros (Itaú, Bradesco, Nubank, etc). Contém data, valor e descrição de cada transação.',
+              icon: '📄',
             },
             {
               title: '📊 Formato CSV',
               desc: 'Planilha separada por ponto-e-vírgula ou vírgula. Colunas esperadas: Data; Descrição; Valor',
+              icon: '📊',
             },
           ].map(({ title, desc }) => (
-            <div key={title} className="bg-slate-900/60 rounded-xl p-4 border border-white/5">
-              <p className="font-bold text-sm mb-2">{title}</p>
+            <div key={title} className="bg-[#0B1120] rounded-xl p-4 border border-white/5 hover:border-[#00C39A]/20 transition-colors">
+              <p className="font-bold text-sm mb-2 text-white">{title}</p>
               <p className="text-xs text-slate-400 leading-relaxed">{desc}</p>
             </div>
           ))}
         </div>
 
         {/* Invoice month */}
-        <div className="mb-6 p-4 rounded-xl border border-blue-900/50 bg-blue-950/20">
-          <label className="block text-xs text-blue-400 font-semibold uppercase tracking-wide mb-2">
+        <div className="mb-6 p-4 rounded-xl border border-[#00C39A]/20 bg-[#00C39A]/5">
+          <label className="block text-xs text-[#00C39A] font-semibold uppercase tracking-wide mb-2">
             📅 Mês de referência da fatura
           </label>
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
@@ -192,8 +197,7 @@ export function ImportPage({ month, year, showToast }: Props) {
               type="month"
               value={invoiceMonth}
               onChange={e => setInvoiceMonth(e.target.value)}
-              className="rounded-xl px-4 py-2.5 text-sm outline-none border border-slate-700 focus:border-blue-500"
-              style={{ background: '#0a0f1e', color: '#e2e8f0' }}
+              className="rounded-xl px-4 py-2.5 text-sm outline-none border border-slate-700 focus:border-[#00C39A] transition-colors bg-[#0B1120] text-slate-200"
             />
             <p className="text-xs text-slate-400">
               Todas as transações importadas serão agrupadas neste mês.
@@ -203,13 +207,13 @@ export function ImportPage({ month, year, showToast }: Props) {
 
         {/* Drop zone */}
         <div
-          className="border-2 border-dashed border-slate-700 rounded-2xl p-10 text-center cursor-pointer hover:border-blue-500 hover:bg-blue-950/20 transition-all"
+          className="border-2 border-dashed border-slate-700 rounded-2xl p-12 text-center cursor-pointer hover:border-[#00C39A] hover:bg-[#00C39A]/5 transition-all duration-300 group"
           onClick={() => document.getElementById('file-input-import')?.click()}
           onDragOver={e => e.preventDefault()}
           onDrop={handleDrop}
         >
-          <div className="text-4xl mb-3">📂</div>
-          <p className="font-bold mb-1">Clique ou arraste o arquivo aqui</p>
+          <div className="text-5xl mb-4 group-hover:scale-110 transition-transform">📂</div>
+          <p className="font-bold mb-2 text-white">Clique ou arraste o arquivo aqui</p>
           <p className="text-sm text-slate-400">Suporta .ofx, .qfx, .csv — processado localmente</p>
           <input
             id="file-input-import"
@@ -223,20 +227,34 @@ export function ImportPage({ month, year, showToast }: Props) {
 
       {/* Preview */}
       {rows.length > 0 && (
-        <Card>
-          <div className="flex items-center justify-between mb-4">
-            <CardTitle className="mb-0">
-              👁 Preview — {rows.length} transações
+        <Card className="bg-[#0F172A]/80 backdrop-blur-sm border border-white/5 rounded-2xl p-6 mt-6">
+          <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
+            <CardTitle className="mb-0 text-[#00C39A] flex items-center gap-2">
+              <span>👁</span> Preview — {rows.length} transações
             </CardTitle>
             <div className="flex gap-2">
-              <Button variant="outline" size="sm" onClick={() => toggleAll(true)}>✅ Todos</Button>
-              <Button variant="outline" size="sm" onClick={() => toggleAll(false)}>⬜ Nenhum</Button>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => toggleAll(true)}
+                className="border-slate-700 hover:border-[#00C39A] hover:text-[#00C39A]"
+              >
+                ✅ Todos
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => toggleAll(false)}
+                className="border-slate-700 hover:border-slate-500"
+              >
+                ⬜ Nenhum
+              </Button>
             </div>
           </div>
 
-          <div className="flex flex-col gap-2 max-h-96 overflow-y-auto mb-4">
+          <div className="flex flex-col gap-2 max-h-96 overflow-y-auto mb-4 pr-2">
             {rows.map((r, i) => (
-              <div key={i} className="flex items-center gap-3 bg-slate-900/60 rounded-xl px-4 py-2.5">
+              <div key={i} className="flex items-center gap-3 bg-[#0B1120] rounded-xl px-4 py-3 border border-white/5 hover:border-[#00C39A]/20 transition-colors">
                 <input
                   type="checkbox"
                   checked={checked[i] || false}
@@ -245,11 +263,11 @@ export function ImportPage({ month, year, showToast }: Props) {
                     next[i] = e.target.checked
                     setChecked(next)
                   }}
-                  className="w-4 h-4 accent-blue-500 flex-shrink-0"
+                  className="w-4 h-4 accent-[#00C39A] flex-shrink-0 rounded"
                 />
-                <span className="flex-1 text-sm truncate">{r.desc}</span>
+                <span className="flex-1 text-sm truncate text-white">{r.desc}</span>
                 <span className="text-xs text-slate-500 min-w-[70px] text-center">{fmtDate(r.data)}</span>
-                <span className={`font-bold text-sm min-w-[90px] text-right ${r.tipo === 'receita' ? 'text-green-400' : 'text-red-400'}`}>
+                <span className={`font-bold text-sm min-w-[90px] text-right ${r.tipo === 'receita' ? 'text-[#00C39A]' : 'text-red-400'}`}>
                   {r.tipo === 'receita' ? '+' : '-'} {fmt(r.valor)}
                 </span>
                 <select
@@ -259,8 +277,7 @@ export function ImportPage({ month, year, showToast }: Props) {
                     next[i] = e.target.value
                     setCats(next)
                   }}
-                  className="rounded-lg px-2 py-1 text-xs outline-none border border-slate-700"
-                  style={{ background: '#0a0f1e', color: '#e2e8f0' }}
+                  className="rounded-lg px-2 py-1.5 text-xs outline-none border border-slate-700 focus:border-[#00C39A] bg-[#0B1120] text-slate-200 transition-colors"
                 >
                   {CATS[r.tipo].map(c => <option key={c} value={c}>{c}</option>)}
                 </select>
@@ -268,13 +285,19 @@ export function ImportPage({ month, year, showToast }: Props) {
             ))}
           </div>
 
-          <div className="flex gap-3 items-center flex-wrap">
-            <Button onClick={handleImport} loading={importing} variant="success">
+          <div className="flex gap-3 items-center flex-wrap pt-4 border-t border-white/5">
+            <Button 
+              onClick={handleImport} 
+              loading={importing} 
+              className="bg-gradient-to-r from-[#00C39A] to-[#00A383] hover:from-[#00D4A8] hover:to-[#00C39A] text-white font-semibold"
+            >
               ✔ Importar {selectedCount} selecionados
             </Button>
-            <Button onClick={cancel} variant="outline">✖ Cancelar</Button>
+            <Button onClick={cancel} variant="outline" className="border-slate-700 hover:border-red-500 hover:text-red-400">
+              ✖ Cancelar
+            </Button>
             <span className="text-xs text-slate-500">
-              {selectedCount} de {rows.length} selecionados
+              <span className="text-[#00C39A] font-semibold">{selectedCount}</span> de {rows.length} selecionados
             </span>
           </div>
         </Card>

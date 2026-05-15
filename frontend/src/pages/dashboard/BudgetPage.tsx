@@ -72,12 +72,15 @@ export function BudgetPage({ month, year, yearMonthStr, showToast }: Props) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
         {/* ── Form ── */}
-        <Card>
-          <CardTitle>🎚️ Definir Limite por Categoria</CardTitle>
-          <p className="text-xs text-slate-400 mb-4">
-            Mês: <span className="text-blue-300 font-bold">{yearMonthStr}</span>
+        <Card className="bg-[#0F172A]/80 backdrop-blur-sm border border-white/5 rounded-2xl p-6">
+          <CardTitle className="text-[#00C39A] flex items-center gap-2 mb-1">
+            <span className="text-xl">🎚️</span>
+            Definir Limite por Categoria
+          </CardTitle>
+          <p className="text-xs text-slate-400 mb-5">
+            Mês: <span className="text-[#00C39A] font-bold">{yearMonthStr}</span>
           </p>
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-4">
             <Select
               label="Categoria"
               value={budgetCat}
@@ -95,7 +98,7 @@ export function BudgetPage({ month, year, yearMonthStr, showToast }: Props) {
               placeholder="0,00"
             />
             <Button
-              className="w-full justify-center mt-1"
+              className="w-full justify-center mt-2 bg-gradient-to-r from-[#00C39A] to-[#00A383] hover:from-[#00D4A8] hover:to-[#00C39A] text-white font-semibold rounded-xl py-3 transition-all duration-300 shadow-lg shadow-[#00C39A]/20"
               onClick={handleSave}
               loading={saving}
             >
@@ -105,18 +108,21 @@ export function BudgetPage({ month, year, yearMonthStr, showToast }: Props) {
         </Card>
 
         {/* ── Summary ── */}
-        <Card>
-          <CardTitle>📊 Resumo do Mês</CardTitle>
+        <Card className="bg-[#0F172A]/80 backdrop-blur-sm border border-white/5 rounded-2xl p-6">
+          <CardTitle className="text-[#00C39A] flex items-center gap-2 mb-4">
+            <span className="text-xl">📊</span>
+            Resumo do Mês
+          </CardTitle>
           {budgets.length === 0
             ? <EmptyState message="Nenhum orçamento definido para este mês." />
             : (
               <div className="grid grid-cols-3 gap-4">
                 {[
-                  { v: fmt(totalLimit), l: 'Total Orçado',      c: 'text-blue-400'   },
-                  { v: fmt(totalSpent), l: 'Gasto no Mês',      c: 'text-red-400'    },
-                  { v: overCount,       l: 'Categ. Estouradas', c: 'text-yellow-400' },
-                ].map(({ v, l, c }) => (
-                  <div key={l} className="text-center bg-slate-900/60 rounded-xl p-4">
+                  { v: fmt(totalLimit), l: 'Total Orçado',      c: 'text-[#00C39A]', bg: 'bg-[#00C39A]/10', border: 'border-[#00C39A]/20' },
+                  { v: fmt(totalSpent), l: 'Gasto no Mês',      c: 'text-red-400',   bg: 'bg-red-500/10',   border: 'border-red-500/20' },
+                  { v: overCount,       l: 'Categ. Estouradas', c: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/20' },
+                ].map(({ v, l, c, bg, border }) => (
+                  <div key={l} className={`text-center ${bg} ${border} border rounded-xl p-4`}>
                     <div className={`text-xl font-black ${c}`}>{v}</div>
                     <div className="text-xs text-slate-500 mt-1">{l}</div>
                   </div>
@@ -128,8 +134,11 @@ export function BudgetPage({ month, year, yearMonthStr, showToast }: Props) {
       </div>
 
       {/* ── Budget list ── */}
-      <Card>
-        <CardTitle>📋 Orçamentos Definidos</CardTitle>
+      <Card className="bg-[#0F172A]/80 backdrop-blur-sm border border-white/5 rounded-2xl p-6 mt-6">
+        <CardTitle className="text-[#00C39A] flex items-center gap-2 mb-4">
+          <span className="text-xl">📋</span>
+          Orçamentos Definidos
+        </CardTitle>
         {loading
           ? <EmptyState message="Carregando..." />
           : budgets.length === 0
@@ -140,13 +149,13 @@ export function BudgetPage({ month, year, yearMonthStr, showToast }: Props) {
                   const spent    = spending[b.category] || 0
                   const p        = b.limit > 0 ? Math.min((spent / b.limit) * 100, 100) : 0
                   const over     = spent > b.limit
-                  const barColor = over ? '#ef4444' : p > 80 ? '#f59e0b' : '#22c55e'
+                  const barColor = over ? '#ef4444' : p > 80 ? '#f59e0b' : '#00C39A'
 
                   return (
-                    <div key={b.id} className="bg-slate-900/60 rounded-xl px-4 py-3">
-                      <div className="flex items-center justify-between mb-2">
+                    <div key={b.id} className="bg-[#0B1120] rounded-xl px-4 py-4 border border-white/5 hover:border-[#00C39A]/30 transition-colors">
+                      <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-3">
-                          <span className="font-semibold text-sm">{b.category}</span>
+                          <span className="font-semibold text-sm text-white">{b.category}</span>
                           {over
                             ? <Badge variant="red">⚠️ Estourado</Badge>
                             : p > 80
@@ -154,23 +163,23 @@ export function BudgetPage({ month, year, yearMonthStr, showToast }: Props) {
                               : <Badge variant="green">✅ OK</Badge>
                           }
                         </div>
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-4">
                           <span className="text-xs text-slate-400">
                             {fmt(spent)} / {fmt(b.limit)}
                           </span>
                           <button
                             onClick={() => handleDelete(b.id)}
-                            className="text-slate-600 hover:text-red-400 transition-colors text-sm"
+                            className="text-slate-600 hover:text-red-400 transition-colors text-sm p-1 rounded-lg hover:bg-red-500/10"
                           >🗑</button>
                         </div>
                       </div>
-                      <div className="bg-slate-800 rounded-full h-2 overflow-hidden">
+                      <div className="bg-[#1E293B] rounded-full h-2.5 overflow-hidden">
                         <div
                           className="h-full rounded-full transition-all duration-500"
                           style={{ width: `${p.toFixed(1)}%`, background: barColor }}
                         />
                       </div>
-                      <div className="flex justify-between text-xs mt-1">
+                      <div className="flex justify-between text-xs mt-2">
                         <span style={{ color: barColor }} className="font-bold">
                           {p.toFixed(1)}%
                         </span>

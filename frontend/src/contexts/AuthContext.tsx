@@ -1,25 +1,21 @@
 import {
-  createContext, useContext, useState,
-  useEffect, useCallback, ReactNode,
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
 } from 'react'
-import { api } from '@/api/client'
-import type { User } from '@/types'
+import { api } from '../api/client'
+import { User } from '../types/index'
 
 interface AuthContextType {
-  user:       User | null
-  token:      string | null
-  loading:    boolean
-  login:      (email: string, password: string) => Promise<void>
-  register:   (name: string, email: string, password: string) => Promise<void>
-  logout:     () => void
-  updateUser: (data: Partial<User>) => void
+  user:     User | null
+  token:    string | null
+  loading:  boolean
+  login:    (email: string, password: string) => Promise<void>
+  register: (name: string, email: string, password: string) => Promise<void>
+  logout:   () => void
 }
-
-// Chaves do localStorage centralizadas — evita typos
-const STORAGE_KEYS = {
-  token: '@planner:token',
-  user:  '@planner:user',
-} as const
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType)
 
@@ -28,69 +24,52 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [token,   setToken]   = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
 
-  // Hidrata o estado a partir do localStorage na primeira carga
+  // Restore session from localStorage on mount
   useEffect(() => {
-    try {
-      const savedToken = localStorage.getItem(STORAGE_KEYS.token)
-      const savedUser  = localStorage.getItem(STORAGE_KEYS.user)
-      if (savedToken && savedUser) {
+    const savedToken = localStorage.getItem('token')
+    const savedUser  = localStorage.getItem('user')
+    if (savedToken && savedUser) {
+      try {
         setToken(savedToken)
         setUser(JSON.parse(savedUser))
+      } catch {
+        localStorage.removeItem('token')
+        localStorage.removeItem('user')
       }
-    } catch {
-      // JSON inválido — limpa o storage corrompido
-      localStorage.removeItem(STORAGE_KEYS.token)
-      localStorage.removeItem(STORAGE_KEYS.user)
-    } finally {
-      setLoading(false)
     }
+    setLoading(false)
   }, [])
 
-  /** Persiste token + user no state e localStorage */
-  const persist = useCallback((t: string, u: User) => {
-    setToken(t)
-    setUser(u)
-    localStorage.setItem(STORAGE_KEYS.token, t)
-    localStorage.setItem(STORAGE_KEYS.user, JSON.stringify(u))
-  }, [])
+  const persist = (token: string, user: User) => {
+    setToken(token)
+    setUser(user)
+    localStorage.setItem('token', token)
+    localStorage.setItem('user', JSON.stringify(user))
+  }
 
-  const login = useCallback(async (email: string, password: string) => {
+  const login = async (email: string, password: string) => {
     const { data } = await api.post('/auth/login', { email, password })
     persist(data.token, data.user)
-  }, [persist])
+  }
 
-  const register = useCallback(async (name: string, email: string, password: string) => {
+  const register = async (name: string, email: string, password: string) => {
     const { data } = await api.post('/auth/register', { name, email, password })
     persist(data.token, data.user)
-  }, [persist])
+  }
 
-  const logout = useCallback(() => {
+  const logout = () => {
     setToken(null)
     setUser(null)
-    localStorage.removeItem(STORAGE_KEYS.token)
-    localStorage.removeItem(STORAGE_KEYS.user)
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
     window.location.href = '/login'
-  }, [])
-
-  // ✅ BUG CORRIGIDO: usava chave diferente ('token' vs '@planner:token')
-  const updateUser = useCallback((updatedData: Partial<User>) => {
-    setUser(prev => {
-      if (!prev) return prev
-      const updated = { ...prev, ...updatedData }
-      localStorage.setItem(STORAGE_KEYS.user, JSON.stringify(updated))
-      return updated
-    })
-  }, [])
+  }
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, login, register, logout, updateUser }}>
+    <AuthContext.Provider value={{ user, token, loading, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   )
 }
 
-export const useAuth = () => {
-  const ctx = useContext(AuthContext)
-  if (!ctx) throw new Error('useAuth deve ser usado dentro de <AuthProvider>')
-  return ctx
-}
+export const useAuth = () => useContext(AuthContext)

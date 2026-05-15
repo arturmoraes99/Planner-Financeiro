@@ -99,9 +99,12 @@ export function GoalsPage({ showToast }: Props) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
         {/* ── Form ── */}
-        <Card>
-          <CardTitle>🎯 Nova Meta</CardTitle>
-          <div className="flex flex-col gap-3">
+        <Card className="bg-[#0F172A]/80 backdrop-blur-sm border border-white/5 rounded-2xl p-6">
+          <CardTitle className="text-[#00C39A] flex items-center gap-2 mb-4">
+            <span className="text-xl">🎯</span>
+            Nova Meta
+          </CardTitle>
+          <div className="flex flex-col gap-4">
             <Input
               label="Nome da Meta"
               value={form.name}
@@ -134,7 +137,7 @@ export function GoalsPage({ showToast }: Props) {
               ))}
             </Select>
             <Button
-              className="w-full justify-center mt-1"
+              className="w-full justify-center mt-2 bg-gradient-to-r from-[#00C39A] to-[#00A383] hover:from-[#00D4A8] hover:to-[#00C39A] text-white font-semibold rounded-xl py-3 transition-all duration-300 shadow-lg shadow-[#00C39A]/20"
               onClick={handleCreate}
               loading={saving}
             >
@@ -144,35 +147,38 @@ export function GoalsPage({ showToast }: Props) {
         </Card>
 
         {/* ── Overview ── */}
-        <Card>
-          <CardTitle>📊 Visão Geral</CardTitle>
+        <Card className="bg-[#0F172A]/80 backdrop-blur-sm border border-white/5 rounded-2xl p-6">
+          <CardTitle className="text-[#00C39A] flex items-center gap-2 mb-4">
+            <span className="text-xl">📊</span>
+            Visão Geral
+          </CardTitle>
           {goals.length === 0
             ? <EmptyState message="Nenhuma meta criada." />
             : (
               <>
                 <div className="grid grid-cols-3 gap-4 mb-6">
                   {[
-                    { v: goals.length,    l: 'Metas',      c: 'text-blue-400'   },
-                    { v: concluded,       l: 'Concluídas', c: 'text-green-400'  },
-                    { v: fmt(totalCurrent), l: 'Captado',  c: 'text-yellow-400' },
-                  ].map(({ v, l, c }) => (
-                    <div key={l} className="text-center">
+                    { v: goals.length,      l: 'Metas',      c: 'text-[#00C39A]', bg: 'bg-[#00C39A]/10' },
+                    { v: concluded,         l: 'Concluídas', c: 'text-emerald-400', bg: 'bg-emerald-500/10' },
+                    { v: fmt(totalCurrent), l: 'Captado',    c: 'text-amber-400', bg: 'bg-amber-500/10' },
+                  ].map(({ v, l, c, bg }) => (
+                    <div key={l} className={`text-center ${bg} rounded-xl p-4 border border-white/5`}>
                       <div className={`text-2xl font-black ${c}`}>{v}</div>
                       <div className="text-xs text-slate-500 mt-0.5">{l}</div>
                     </div>
                   ))}
                 </div>
-                <p className="text-xs text-slate-400 mb-1">
-                  Total: {fmt(totalCurrent)} de {fmt(totalTarget)}
+                <p className="text-xs text-slate-400 mb-2">
+                  Total: <span className="text-white font-semibold">{fmt(totalCurrent)}</span> de <span className="text-white font-semibold">{fmt(totalTarget)}</span>
                 </p>
-                <div className="bg-slate-900 rounded-full h-2.5 overflow-hidden">
+                <div className="bg-[#1E293B] rounded-full h-3 overflow-hidden">
                   <div
-                    className="h-full rounded-full bg-gradient-to-r from-blue-600 to-blue-400 transition-all duration-500"
+                    className="h-full rounded-full bg-gradient-to-r from-[#00C39A] to-[#00D4A8] transition-all duration-500"
                     style={{ width: `${Math.min(overallPct, 100).toFixed(1)}%` }}
                   />
                 </div>
-                <p className="text-xs text-slate-500 mt-1 text-right">
-                  {overallPct.toFixed(1)}% do total
+                <p className="text-xs text-slate-500 mt-2 text-right">
+                  <span className="text-[#00C39A] font-bold">{overallPct.toFixed(1)}%</span> do total
                 </p>
               </>
             )
@@ -181,8 +187,11 @@ export function GoalsPage({ showToast }: Props) {
       </div>
 
       {/* ── Goals grid ── */}
-      <Card>
-        <CardTitle>🎯 Minhas Metas</CardTitle>
+      <Card className="bg-[#0F172A]/80 backdrop-blur-sm border border-white/5 rounded-2xl p-6 mt-6">
+        <CardTitle className="text-[#00C39A] flex items-center gap-2 mb-4">
+          <span className="text-xl">🎯</span>
+          Minhas Metas
+        </CardTitle>
         {loading
           ? <Spinner />
           : goals.length === 0
@@ -195,20 +204,20 @@ export function GoalsPage({ showToast }: Props) {
                   const dias = g.deadline
                     ? Math.ceil((new Date(g.deadline).getTime() - Date.now()) / 86400000)
                     : null
-                  const barColor = done ? '#22c55e' : pct > 50 ? '#3b82f6' : '#f59e0b'
+                  const barColor = done ? '#00C39A' : pct > 50 ? '#00C39A' : '#f59e0b'
 
                   return (
-                    <div key={g.id} className="bg-slate-900/60 rounded-2xl p-5 border border-white/5 relative">
+                    <div key={g.id} className="bg-[#0B1120] rounded-2xl p-5 border border-white/5 relative hover:border-[#00C39A]/30 transition-colors">
                       <button
                         onClick={() => handleDelete(g.id)}
-                        className="absolute top-3 right-3 text-slate-600 hover:text-red-400 transition-colors text-sm"
+                        className="absolute top-3 right-3 text-slate-600 hover:text-red-400 transition-colors text-sm p-1 rounded-lg hover:bg-red-500/10"
                       >🗑</button>
 
-                      <div className="text-3xl mb-2">{g.icon}</div>
-                      <div className="font-bold mb-1 pr-6">
+                      <div className="text-3xl mb-3">{g.icon}</div>
+                      <div className="font-bold mb-2 pr-6 text-white">
                         {g.name}
                         {done && (
-                          <span className="ml-2 text-xs bg-green-900 text-green-300 px-2 py-0.5 rounded-full">
+                          <span className="ml-2 text-xs bg-[#00C39A]/20 text-[#00C39A] px-2 py-0.5 rounded-full">
                             ✓ Concluída
                           </span>
                         )}
@@ -219,7 +228,7 @@ export function GoalsPage({ showToast }: Props) {
                         <span>Meta: {fmt(g.target)}</span>
                       </div>
 
-                      <div className="bg-slate-800 rounded-full h-2 overflow-hidden mb-1">
+                      <div className="bg-[#1E293B] rounded-full h-2.5 overflow-hidden mb-2">
                         <div
                           className="h-full rounded-full transition-all duration-500"
                           style={{ width: `${pct.toFixed(1)}%`, background: barColor }}
@@ -236,7 +245,7 @@ export function GoalsPage({ showToast }: Props) {
                       {dias !== null && (
                         <p className={[
                           'text-xs mb-3',
-                          dias < 0 ? 'text-red-400' : dias < 30 ? 'text-yellow-400' : 'text-slate-500',
+                          dias < 0 ? 'text-red-400' : dias < 30 ? 'text-amber-400' : 'text-slate-500',
                         ].join(' ')}>
                           {dias < 0 ? '⚠️ Prazo vencido' : dias === 0 ? '📅 Vence hoje' : `📅 ${dias} dias restantes`}
                         </p>
@@ -245,7 +254,7 @@ export function GoalsPage({ showToast }: Props) {
                       {!done && (
                         <button
                           onClick={() => setModalGoalId(g.id)}
-                          className="w-full py-2 rounded-xl text-xs font-bold bg-blue-900/60 text-blue-300 hover:bg-blue-700 hover:text-white transition-colors"
+                          className="w-full py-2.5 rounded-xl text-xs font-bold bg-[#00C39A]/15 text-[#00C39A] hover:bg-[#00C39A] hover:text-white transition-all duration-200"
                         >
                           💰 Registrar Aporte
                         </button>
@@ -268,7 +277,12 @@ export function GoalsPage({ showToast }: Props) {
             <Button variant="outline" onClick={() => { setModalGoalId(null); setAporteAmount('') }}>
               Cancelar
             </Button>
-            <Button variant="success" onClick={handleContribute} loading={savingAporte}>
+            <Button 
+              variant="success" 
+              onClick={handleContribute} 
+              loading={savingAporte}
+              className="bg-[#00C39A] hover:bg-[#00D4A8] text-white"
+            >
               ✔ Confirmar
             </Button>
           </>
@@ -277,7 +291,7 @@ export function GoalsPage({ showToast }: Props) {
         {modalGoal && (
           <p className="text-sm text-slate-400 mb-4">
             {modalGoal.icon} <strong className="text-white">{modalGoal.name}</strong>
-            {' '}· Faltam <strong className="text-blue-400">{fmt(modalGoal.target - modalGoal.current)}</strong>
+            {' '}· Faltam <strong className="text-[#00C39A]">{fmt(modalGoal.target - modalGoal.current)}</strong>
           </p>
         )}
         <Input

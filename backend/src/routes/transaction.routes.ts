@@ -1,16 +1,19 @@
-import { Router } from 'express'
-import { authMiddleware } from '../middlewares/auth.middleware'
+import { Router, Request, Response } from 'express'
+import { authMiddleware, AuthRequest } from '../middlewares/auth.middleware'
 import { list, create, update, bulkCreate, remove, summary } from '../controllers/transaction.controller'
 
 const router = Router()
 
 router.use(authMiddleware)
 
-router.get('/',           list)
-router.get('/summary',    summary)
-router.post('/',          create)
-router.post('/bulk',      bulkCreate)
-router.put('/:id',        update)      // ← NOVO
-router.delete('/:id',     remove)
+const auth = (handler: (req: AuthRequest, res: Response) => Promise<void>) =>
+  (req: Request, res: Response) => handler(req as AuthRequest, res)
+
+router.get('/',        auth(list))
+router.get('/summary', auth(summary))
+router.post('/',       auth(create))
+router.post('/bulk',   auth(bulkCreate))
+router.put('/:id',     auth(update))
+router.delete('/:id',  auth(remove))
 
 export default router

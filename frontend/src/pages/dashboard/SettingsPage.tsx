@@ -28,15 +28,15 @@ function PasswordStrengthBar({ password }: { password: string }) {
   ].filter(Boolean).length
 
   const labels = ['', 'Fraca', 'Razoável', 'Boa', 'Forte']
-  const colors = ['', '#ef4444', '#f59e0b', '#3b82f6', '#22c55e']
+  const colors = ['', '#ef4444', '#f59e0b', '#3b82f6', '#00C39A']
 
   if (!password) return null
   return (
     <div className="mt-2">
       <div className="flex gap-1.5 mb-1">
         {[1, 2, 3, 4].map(i => (
-          <div key={i} className="flex-1 h-1 rounded-full transition-all duration-300"
-            style={{ background: i <= score ? colors[score] : '#1e293b' }} />
+          <div key={i} className="flex-1 h-1.5 rounded-full transition-all duration-300"
+            style={{ background: i <= score ? colors[score] : '#1E293B' }} />
         ))}
       </div>
       <span className="text-[11px] font-semibold" style={{ color: colors[score] }}>
@@ -182,9 +182,9 @@ export function SettingsPage({ showToast }: Props) {
   // ── Loading ─────────────────────────────────────────────────────────
   if (loading) {
     return (
-      <Card className="flex items-center justify-center py-20">
+      <Card className="flex items-center justify-center py-20 bg-[#0F172A]/80 border border-white/5 rounded-2xl">
         <div className="flex flex-col items-center gap-4 text-slate-500">
-          <div className="w-8 h-8 border-2 border-slate-700 border-t-blue-500 rounded-full animate-spin" />
+          <div className="w-8 h-8 border-2 border-slate-700 border-t-[#00C39A] rounded-full animate-spin" />
           <span className="text-sm">Carregando configurações...</span>
         </div>
       </Card>
@@ -196,7 +196,7 @@ export function SettingsPage({ showToast }: Props) {
 
       {/* ── Sidebar ── */}
       <aside className="md:w-56 shrink-0">
-        <Card className="p-2">
+        <Card className="p-2 bg-[#0F172A]/80 border border-white/5 rounded-2xl">
           {TABS.map(t => (
             <button
               key={t.id}
@@ -204,9 +204,9 @@ export function SettingsPage({ showToast }: Props) {
               className={[
                 'w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-left',
                 tab === t.id
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-gradient-to-r from-[#00C39A] to-[#00A383] text-white shadow-lg shadow-[#00C39A]/20'
                   : t.id === 'account'
-                    ? 'text-red-400 hover:bg-red-950/40'
+                    ? 'text-red-400 hover:bg-red-500/10'
                     : 'text-slate-400 hover:bg-white/5 hover:text-white',
               ].join(' ')}
             >
@@ -222,19 +222,21 @@ export function SettingsPage({ showToast }: Props) {
 
         {/* PERFIL */}
         {tab === 'profile' && (
-          <Card>
-            <h2 className="text-lg font-bold text-blue-400 mb-6">👤 Informações do Perfil</h2>
+          <Card className="bg-[#0F172A]/80 border border-white/5 rounded-2xl p-6">
+            <h2 className="text-lg font-bold text-[#00C39A] mb-6 flex items-center gap-2">
+              <span>👤</span> Informações do Perfil
+            </h2>
 
             {/* Avatar */}
-            <div className="flex items-center gap-4 mb-8 p-4 rounded-2xl bg-slate-900/50 border border-white/5">
-              <div className="w-16 h-16 rounded-full bg-blue-900 border-2 border-blue-500 flex items-center justify-center text-2xl font-black text-blue-300 flex-shrink-0">
+            <div className="flex items-center gap-4 mb-8 p-4 rounded-2xl bg-[#0B1120] border border-white/5">
+              <div className="w-16 h-16 rounded-full bg-[#00C39A]/20 border-2 border-[#00C39A] flex items-center justify-center text-2xl font-black text-[#00C39A] flex-shrink-0">
                 {profile?.avatarUrl
                   ? <img src={profile.avatarUrl} alt="avatar" className="w-full h-full rounded-full object-cover" />
                   : initials
                 }
               </div>
               <div>
-                <p className="font-bold">{profile?.name}</p>
+                <p className="font-bold text-white">{profile?.name}</p>
                 <p className="text-sm text-slate-400">{profile?.email}</p>
                 <p className="text-xs text-slate-500 mt-1">
                   Membro desde {profile?.createdAt
@@ -260,7 +262,11 @@ export function SettingsPage({ showToast }: Props) {
                 placeholder="seu@email.com"
               />
               <div className="flex justify-end pt-2">
-                <Button onClick={handleSaveProfile} loading={savingProfile}>
+                <Button 
+                  onClick={handleSaveProfile} 
+                  loading={savingProfile}
+                  className="bg-gradient-to-r from-[#00C39A] to-[#00A383] hover:from-[#00D4A8] hover:to-[#00C39A] text-white font-semibold"
+                >
                   💾 Salvar Perfil
                 </Button>
               </div>
@@ -270,8 +276,10 @@ export function SettingsPage({ showToast }: Props) {
 
         {/* PREFERÊNCIAS */}
         {tab === 'preferences' && (
-          <Card>
-            <h2 className="text-lg font-bold text-blue-400 mb-6">🎨 Preferências</h2>
+          <Card className="bg-[#0F172A]/80 border border-white/5 rounded-2xl p-6">
+            <h2 className="text-lg font-bold text-[#00C39A] mb-6 flex items-center gap-2">
+              <span>🎨</span> Preferências
+            </h2>
             <div className="flex flex-col gap-5">
 
               <Select
@@ -300,8 +308,8 @@ export function SettingsPage({ showToast }: Props) {
                       className={[
                         'py-3 rounded-xl text-sm font-semibold border-2 transition-all',
                         prefs.theme === t.value
-                          ? 'border-blue-500 bg-blue-900/40 text-blue-300'
-                          : 'border-slate-700 text-slate-400 hover:border-slate-500',
+                          ? 'border-[#00C39A] bg-[#00C39A]/15 text-[#00C39A]'
+                          : 'border-slate-700 text-slate-400 hover:border-slate-500 hover:text-white',
                       ].join(' ')}
                     >
                       {t.label}
@@ -320,7 +328,11 @@ export function SettingsPage({ showToast }: Props) {
               </Select>
 
               <div className="flex justify-end pt-2">
-                <Button onClick={handleSavePrefs} loading={savingPrefs}>
+                <Button 
+                  onClick={handleSavePrefs} 
+                  loading={savingPrefs}
+                  className="bg-gradient-to-r from-[#00C39A] to-[#00A383] hover:from-[#00D4A8] hover:to-[#00C39A] text-white font-semibold"
+                >
                   💾 Salvar Preferências
                 </Button>
               </div>
@@ -330,8 +342,10 @@ export function SettingsPage({ showToast }: Props) {
 
         {/* NOTIFICAÇÕES */}
         {tab === 'notifications' && (
-          <Card>
-            <h2 className="text-lg font-bold text-blue-400 mb-6">🔔 Notificações</h2>
+          <Card className="bg-[#0F172A]/80 border border-white/5 rounded-2xl p-6">
+            <h2 className="text-lg font-bold text-[#00C39A] mb-6 flex items-center gap-2">
+              <span>🔔</span> Notificações
+            </h2>
             <div className="flex flex-col gap-3">
               {[
                 {
@@ -342,17 +356,17 @@ export function SettingsPage({ showToast }: Props) {
               ].map(item => (
                 <div
                   key={item.key}
-                  className="flex items-center justify-between p-4 bg-slate-900/50 rounded-xl border border-white/5"
+                  className="flex items-center justify-between p-4 bg-[#0B1120] rounded-xl border border-white/5"
                 >
                   <div>
-                    <p className="font-semibold text-sm">{item.label}</p>
+                    <p className="font-semibold text-sm text-white">{item.label}</p>
                     <p className="text-xs text-slate-400 mt-0.5">{item.desc}</p>
                   </div>
                   <button
                     onClick={() => setPrefs(p => ({ ...p, [item.key]: !p[item.key] }))}
                     className={[
                       'relative w-12 h-6 rounded-full transition-colors',
-                      prefs[item.key] ? 'bg-blue-600' : 'bg-slate-700',
+                      prefs[item.key] ? 'bg-[#00C39A]' : 'bg-slate-700',
                     ].join(' ')}
                   >
                     <span className={[
@@ -363,7 +377,11 @@ export function SettingsPage({ showToast }: Props) {
                 </div>
               ))}
               <div className="flex justify-end pt-2">
-                <Button onClick={handleSavePrefs} loading={savingPrefs}>
+                <Button 
+                  onClick={handleSavePrefs} 
+                  loading={savingPrefs}
+                  className="bg-gradient-to-r from-[#00C39A] to-[#00A383] hover:from-[#00D4A8] hover:to-[#00C39A] text-white font-semibold"
+                >
                   💾 Salvar
                 </Button>
               </div>
@@ -373,8 +391,10 @@ export function SettingsPage({ showToast }: Props) {
 
         {/* SEGURANÇA */}
         {tab === 'security' && (
-          <Card>
-            <h2 className="text-lg font-bold text-blue-400 mb-6">🔒 Alterar Senha</h2>
+          <Card className="bg-[#0F172A]/80 border border-white/5 rounded-2xl p-6">
+            <h2 className="text-lg font-bold text-[#00C39A] mb-6 flex items-center gap-2">
+              <span>🔒</span> Alterar Senha
+            </h2>
             <div className="flex flex-col gap-4">
               {/* Current password */}
               <div>
@@ -387,8 +407,7 @@ export function SettingsPage({ showToast }: Props) {
                     value={currentPwd}
                     onChange={e => setCurrentPwd(e.target.value)}
                     placeholder="••••••••"
-                    className="w-full rounded-xl px-4 py-3 pr-12 text-sm outline-none border border-slate-700 focus:border-blue-500 transition-colors"
-                    style={{ background: '#0a0f1e', color: '#e2e8f0' }}
+                    className="w-full rounded-xl px-4 py-3 pr-12 text-sm outline-none border border-slate-700 focus:border-[#00C39A] transition-colors bg-[#0B1120] text-slate-200"
                   />
                   <button
                     type="button"
@@ -411,8 +430,7 @@ export function SettingsPage({ showToast }: Props) {
                     value={newPwd}
                     onChange={e => setNewPwd(e.target.value)}
                     placeholder="Mínimo 6 caracteres"
-                    className="w-full rounded-xl px-4 py-3 pr-12 text-sm outline-none border border-slate-700 focus:border-blue-500 transition-colors"
-                    style={{ background: '#0a0f1e', color: '#e2e8f0' }}
+                    className="w-full rounded-xl px-4 py-3 pr-12 text-sm outline-none border border-slate-700 focus:border-[#00C39A] transition-colors bg-[#0B1120] text-slate-200"
                   />
                   <button
                     type="button"
@@ -436,8 +454,7 @@ export function SettingsPage({ showToast }: Props) {
                     value={confirmPwd}
                     onChange={e => setConfirmPwd(e.target.value)}
                     placeholder="Repita a nova senha"
-                    className="w-full rounded-xl px-4 py-3 pr-12 text-sm outline-none border border-slate-700 focus:border-blue-500 transition-colors"
-                    style={{ background: '#0a0f1e', color: '#e2e8f0' }}
+                    className="w-full rounded-xl px-4 py-3 pr-12 text-sm outline-none border border-slate-700 focus:border-[#00C39A] transition-colors bg-[#0B1120] text-slate-200"
                   />
                   <button
                     type="button"
@@ -453,7 +470,11 @@ export function SettingsPage({ showToast }: Props) {
               </div>
 
               <div className="flex justify-end pt-2">
-                <Button onClick={handleChangePassword} loading={savingPwd}>
+                <Button 
+                  onClick={handleChangePassword} 
+                  loading={savingPwd}
+                  className="bg-gradient-to-r from-[#00C39A] to-[#00A383] hover:from-[#00D4A8] hover:to-[#00C39A] text-white font-semibold"
+                >
                   🔒 Alterar Senha
                 </Button>
               </div>
@@ -466,23 +487,32 @@ export function SettingsPage({ showToast }: Props) {
           <div className="flex flex-col gap-4">
 
             {/* Export data */}
-            <Card>
+            <Card className="bg-[#0F172A]/80 border border-white/5 rounded-2xl p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-bold text-blue-400 mb-1">📦 Exportar meus dados</h3>
+                  <h3 className="font-bold text-[#00C39A] mb-1 flex items-center gap-2">
+                    <span>📦</span> Exportar meus dados
+                  </h3>
                   <p className="text-sm text-slate-400">
                     Baixe todas as suas transações, metas e orçamentos em formato JSON.
                   </p>
                 </div>
-                <Button variant="ghost" onClick={handleExportData} loading={exportingData}>
+                <Button 
+                  variant="ghost" 
+                  onClick={handleExportData} 
+                  loading={exportingData}
+                  className="border border-[#00C39A]/30 text-[#00C39A] hover:bg-[#00C39A]/10"
+                >
                   ⬇ Exportar
                 </Button>
               </div>
             </Card>
 
             {/* Danger zone */}
-            <Card className="border-red-900/40">
-              <h3 className="font-bold text-red-400 mb-1">🗑 Excluir minha conta</h3>
+            <Card className="bg-[#0F172A]/80 border border-red-900/40 rounded-2xl p-6">
+              <h3 className="font-bold text-red-400 mb-1 flex items-center gap-2">
+                <span>🗑</span> Excluir minha conta
+              </h3>
               <p className="text-sm text-slate-400 mb-4">
                 Esta ação é <strong className="text-white">irreversível</strong>. Todos os seus
                 dados serão permanentemente excluídos.
@@ -490,6 +520,7 @@ export function SettingsPage({ showToast }: Props) {
               <Button
                 variant="danger"
                 onClick={() => setShowDeleteModal(true)}
+                className="bg-red-600 hover:bg-red-500 text-white"
               >
                 Excluir conta
               </Button>
@@ -501,12 +532,12 @@ export function SettingsPage({ showToast }: Props) {
       {/* ── Delete confirmation modal ── */}
       {showDeleteModal && (
         <div
-          className="fixed inset-0 bg-black/75 z-50 flex items-center justify-center px-4"
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center px-4"
           onClick={e => { if (e.target === e.currentTarget) setShowDeleteModal(false) }}
         >
-          <div className="rounded-2xl p-6 border border-red-900/60 w-full max-w-sm" style={{ background: '#1a2235' }}>
+          <div className="rounded-2xl p-6 border border-red-900/60 w-full max-w-sm bg-[#0F172A]">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-red-900/50 rounded-full flex items-center justify-center text-xl">🗑</div>
+              <div className="w-10 h-10 bg-red-500/20 rounded-full flex items-center justify-center text-xl">🗑</div>
               <h3 className="font-bold text-red-400">Confirmar exclusão</h3>
             </div>
             <p className="text-sm text-slate-400 mb-5">
@@ -518,21 +549,20 @@ export function SettingsPage({ showToast }: Props) {
                 value={deletePass}
                 onChange={e => setDeletePass(e.target.value)}
                 placeholder="Sua senha"
-                className="w-full rounded-xl px-4 py-3 text-sm outline-none border border-red-900/50 focus:border-red-500 transition-colors"
-                style={{ background: '#0a0f1e', color: '#e2e8f0' }}
+                className="w-full rounded-xl px-4 py-3 text-sm outline-none border border-red-900/50 focus:border-red-500 transition-colors bg-[#0B1120] text-slate-200"
               />
             </div>
             <div className="flex gap-3">
               <Button
                 variant="outline"
-                className="flex-1 justify-center"
+                className="flex-1 justify-center border-slate-700 hover:border-slate-500"
                 onClick={() => { setShowDeleteModal(false); setDeletePass('') }}
               >
                 Cancelar
               </Button>
               <Button
                 variant="danger"
-                className="flex-1 justify-center"
+                className="flex-1 justify-center bg-red-600 hover:bg-red-500"
                 loading={deletingAccount}
                 disabled={!deletePass}
                 onClick={handleDeleteAccount}

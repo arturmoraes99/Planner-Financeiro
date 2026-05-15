@@ -46,19 +46,6 @@ export const CARD_ICONS = [
   '💳', '🔵', '🟣', '⚫', '🥇', '💎', '🌟', '🦁', '🐉', '🚀',
 ]
 
-export const GOAL_ICONS = [
-  { label: '✈️ Viagem',       icon: '✈️' },
-  { label: '🏠 Casa / Imóvel', icon: '🏠' },
-  { label: '🚗 Carro',         icon: '🚗' },
-  { label: '🏍️ Moto',          icon: '🏍️' },
-  { label: '📱 Eletrônico',    icon: '📱' },
-  { label: '🎓 Educação',      icon: '🎓' },
-  { label: '💍 Casamento',     icon: '💍' },
-  { label: '🛡️ Reserva',       icon: '🛡️' },
-  { label: '💰 Investimento',  icon: '💰' },
-  { label: '🎯 Outro',         icon: '🎯' },
-
-
 export const NAV_ITEMS = [
   { id: 'overview',      label: 'Dashboard',   icon: '📊' },
   { id: 'transactions',  label: 'Lançamentos', icon: '💳' },
